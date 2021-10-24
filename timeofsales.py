@@ -8,7 +8,8 @@ url = "https://api.bybit.com/v2/public/trading-records?symbol=ETHUSD"
 payload={}
 headers = {}
 
-while (True):
+i = 0
+while (i >= 0):
     response = requests.request("GET", url, headers=headers, data=payload)
     response_json = json.loads(response.text)
     latest_data = response_json['result'][0]
@@ -29,10 +30,20 @@ while (True):
 
     eth_info.time = pd.to_datetime(eth_info.time)#converting date to timecode
     eth_info.time = eth_info.time.tz_convert('US/Eastern') #converting to EST
-    eth_info.time = str(eth_info.time.strftime('%H:%M')) #converting to hour:minute
+    eth_info.time = str(eth_info.time.strftime('%H:%M:%S')) #converting to hour:minute
 
     spacer = ' | '
-    print(eth_info.ticker + spacer + eth_info.side
-        + spacer + eth_info.price + spacer + 
-        eth_info.qty + spacer + eth_info.time)
+    eth_all = (eth_info.ticker + spacer + eth_info.side
+               + spacer + eth_info.price + spacer + 
+               eth_info.qty + spacer + eth_info.time)
+    if (i == 0):
+        eth_prev = eth_all
+
+    if (eth_prev != eth_all or i == 0):
+        print(eth_all)
+        print(i)
+        eth_prev = eth_all
+    else:
+        pass
+    i += 1
     time.sleep(1)
