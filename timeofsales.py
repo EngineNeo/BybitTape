@@ -2,6 +2,7 @@ import requests
 import json
 import pandas as pd
 import time
+import ctypes
 
 url = "https://api.bybit.com/v2/public/trading-records?symbol=ETHUSD"
 
@@ -41,9 +42,9 @@ while (i >= 0):
 
     if (eth_prev != eth_all or i == 0):
         print(eth_all)
-        print(i)
+        ctypes.windll.kernel32.SetConsoleTitleW(eth_all)
         eth_prev = eth_all
     else:
         pass
     i += 1
-    time.sleep(1)
+    time.sleep(0.25)
