@@ -3,16 +3,12 @@ import json
 import pandas as pd
 import time
 import ctypes
-# import colorama
-# from colorama import Fore, init
+from colorama import init, Back
 
+init() # Colorama init
+
+# API URL
 url = "https://api.bybit.com/v2/public/trading-records?symbol=ETHUSD"
-
-payload={}
-headers = {}
-
-i = 0
-
 class Latest_Data:
         def __init__(self, id, ticker, price, qty, side, time):
             self.id = id
@@ -22,12 +18,27 @@ class Latest_Data:
             self.side = side
             self.time = time
         
-        def display(self):
-            display = (f" {self.ticker} | {self.side: <4} | {self.price: <7} | {self.qty: <7} | {self.time} ")
+        def display(self, title = False):
+            if (title == True): # Title is a normal string
+                display = (f" {self.ticker} | {self.side: <4}"
+                        f" | {self.price: <7} | {self.qty: <7}"
+                        f" | {self.time}")
+            elif (self.side == 'Buy'): # Buy Color
+                blue_buy = (Back.BLUE + self.side + ' ' + Back.RESET)
+                display = (f" {self.ticker} | {blue_buy}"
+                        f" | {self.price: <7} | {self.qty: <7}"
+                        f" | {self.time} ")
+            elif (self.side == 'Sell'): # Sell Color
+                red_sell = (Back.RED + self.side + Back.RESET)
+                display = (f" {self.ticker} | {red_sell}"
+                           f" | {self.price: <7} | {self.qty: <7}"
+                           f" | {self.time} ")
             return display
 
+# To count first loop
+i = 0
 while (i >= 0):
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = requests.request("GET", url)
     response_json = json.loads(response.text)
     latest_data = response_json['result'][0]
 
@@ -47,8 +58,8 @@ while (i >= 0):
         idprev = idmain
 
     if (idprev != idmain or i == 0):
-        print(eth_info.display())
-        ctypes.windll.kernel32.SetConsoleTitleW(eth_info.display()) # sets window title
+        print(eth_info.display(title=False))
+        ctypes.windll.kernel32.SetConsoleTitleW(eth_info.display(title=True)) # sets window title
         idprev = idmain
     elif (idprev == idmain):
         pass
