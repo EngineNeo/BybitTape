@@ -1,3 +1,7 @@
+# TO-DO
+
+# CRASH LOGGING FOR DEBUGGING
+
 import requests
 import json
 import pandas as pd
@@ -9,7 +13,7 @@ init() # Colorama init
 
 # API URL
 url = "https://api.bybit.com/v2/public/trading-records?symbol=ETHUSD"
-class Latest_Data:
+class LatestData:
         def __init__(self, id, ticker, price, qty, side, time):
             self.id = id
             self.ticker = ticker
@@ -20,12 +24,12 @@ class Latest_Data:
         
         def display(self, title = False):
             if (title == True): # Title is a normal string
-                display = (f" {self.ticker} | {self.side: <4}"
+                display = (f" {self.ticker} | {self.side: ^4}"
                         f" | {self.price: <7} | {self.qty: <7}"
                         f" | {self.time}")
             elif (self.side == 'Buy'): # Buy Color
                 blue_buy = (Back.BLUE + self.side + ' ' + Back.RESET)
-                display = (f" {self.ticker} | {blue_buy}"
+                display = (f" {self.ticker} | {blue_buy: ^4}"
                         f" | {self.price: <7} | {self.qty: <7}"
                         f" | {self.time} ")
             elif (self.side == 'Sell'): # Sell Color
@@ -42,7 +46,7 @@ while (i >= 0):
     response_json = json.loads(response.text)
     latest_data = response_json['result'][0]
 
-    eth_info = Latest_Data(latest_data['id'],
+    eth_info = LatestData(latest_data['id'],
             latest_data['symbol'],
             str(latest_data['price']),
             str(latest_data['qty']),
@@ -57,6 +61,7 @@ while (i >= 0):
     if (i == 0):
         idprev = idmain
 
+    # Only print data if new transaction is live
     if (idprev != idmain or i == 0):
         print(eth_info.display(title=False))
         ctypes.windll.kernel32.SetConsoleTitleW(eth_info.display(title=True)) # sets window title
@@ -64,4 +69,4 @@ while (i >= 0):
     elif (idprev == idmain):
         pass
     i += 1
-    time.sleep(0.1)
+    time.sleep(0.1) # How often API is called (Current: 100ms)
