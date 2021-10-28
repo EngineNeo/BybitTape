@@ -11,8 +11,15 @@ from colorama import init, Back
 
 init() # Colorama init
 
-# API URL
-url = "https://api.bybit.com/v2/public/trading-records?symbol=ETHUSD"
+# Select which symbol to track
+def starttimeofSales():
+    symbol = input('Enter Symbol to Track (i.e - BTCUSD, ETHUSD):\n')
+    symbol = str(symbol)
+    url = (f"https://api.bybit.com/v2/public/trading-records?symbol={symbol}")
+    print('initializing..')
+    return url
+
+url = starttimeofSales()
 class LatestData:
         def __init__(self, id, ticker, price, qty, side, time):
             self.id = id
@@ -42,6 +49,7 @@ class LatestData:
 # To count first loop
 i = 0
 while (i >= 0):
+
     response = requests.request("GET", url)
     response_json = json.loads(response.text)
     latest_data = response_json['result'][0]
@@ -53,6 +61,7 @@ while (i >= 0):
             latest_data['side'],
             latest_data['time'])
 
+    # Timecode conversions
     eth_info.time = pd.to_datetime(eth_info.time) # converting date to timecode
     eth_info.time = eth_info.time.tz_convert('US/Eastern') # converting to EST
     eth_info.time = str(eth_info.time.strftime('%H:%M:%S')) # converting to hour:minute
@@ -69,4 +78,4 @@ while (i >= 0):
     elif (idprev == idmain):
         pass
     i += 1
-    time.sleep(0.1) # How often API is called (Current: 100ms)
+    time.sleep(0.05) # API call speed (Current: 50ms)
