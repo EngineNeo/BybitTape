@@ -1,6 +1,6 @@
 # TO-DO
 
-# CRASH LOGGING FOR DEBUGGING
+# INTRODUCE CRASH LOGGING FOR DEBUGGING
 
 import requests
 import json
@@ -11,12 +11,20 @@ from colorama import init, Back
 
 init() # Colorama init
 
+bybitDerivatives = ['BTCUSD', 
+                    'ETHUSD', 
+                    'EOSUSD', 
+                    'XRPUSD', 
+                    'DOTUSD']
+
 # Select which symbol to track
 def starttimeofSales():
     symbol = input('Enter Symbol to Track (i.e - BTCUSD, ETHUSD):\n')
     symbol = str(symbol)
+    while (symbol not in bybitDerivatives):
+        symbol = input('Enter a valid Bybit derivatives pair:')
     url = (f"https://api.bybit.com/v2/public/trading-records?symbol={symbol}")
-    print('initializing..')
+    print('Initializing..')
     return url
 
 url = starttimeofSales()
