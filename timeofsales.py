@@ -21,7 +21,7 @@ bybitDerivatives = ['BTCUSD',
 def starttimeofSales():
     symbol = input('Enter Symbol to Track (i.e - BTCUSD, ETHUSD):\n')
     symbol = str(symbol)
-    while (symbol not in bybitDerivatives):
+    while (symbol not in bybitDerivatives): # user input validation
         symbol = input('Enter a valid Bybit derivatives pair:')
     url = (f"https://api.bybit.com/v2/public/trading-records?symbol={symbol}")
     print('Initializing..')
@@ -85,5 +85,7 @@ while (i >= 0):
         idprev = idmain
     elif (idprev == idmain):
         pass
-    i += 1
+
+    if (i >= 0):
+        i += 1
     time.sleep(0.05) # API call speed (Current: 50ms)
