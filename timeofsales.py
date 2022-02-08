@@ -1,13 +1,11 @@
 from pybit import WebSocket
 import pandas as pd
 from colorama import init, Back
-import json
 
 init() # Colorama init
 
 class LatestData:
         def __init__(self, ticker, price, size, side, time):
-            self.id = id
             self.ticker = ticker
             self.price = price
             self.size = size
@@ -55,7 +53,7 @@ while True:
         data_info.time = data_info.time.tz_convert('US/Eastern') # converting to EST
         data_info.time = str(data_info.time.strftime('%H:%M:%S')) # converting to hour:minute
         if data[0]:
-            print(FIData)
+            print(data_info.display(title=False))
         if not data[0]:
             FIData = data[1]
-            print(FIData)
+            print(data_info.display(title=False))
