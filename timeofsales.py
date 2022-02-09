@@ -3,6 +3,13 @@ import pandas as pd
 from colorama import init, Back
 import ctypes
 
+# TO-DO
+
+# FILTER SIZE
+# USER ABILITY TO CHANGE ENDPOINT
+# USER ABILITY TO FILTER SIZE
+# SOUND ALERTS AND HIGHLIGHTING
+
 init() # Colorama init
 
 class LatestData:
@@ -39,6 +46,7 @@ ws = WebSocket(
 )
 while True:
     data = ws.fetch(subs[0])
+    ws.send({"op": "auth"}) # Heartbeat Packet
 
     if data:
         FIData = data[0]
