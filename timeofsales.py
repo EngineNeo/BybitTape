@@ -1,6 +1,7 @@
 from pybit import WebSocket
 import pandas as pd
 from colorama import init, Back
+import ctypes
 
 init() # Colorama init
 
@@ -33,7 +34,7 @@ subs = [
     "trade.ETHUSD"
 ]
 ws = WebSocket(
-    "wss://stream-testnet.bybit.com/realtime",
+    "wss://stream.bybit.com/realtime",
     subscriptions=subs
 )
 while True:
@@ -52,8 +53,11 @@ while True:
         data_info.time = pd.to_datetime(data_info.time) # converting date to timecode
         data_info.time = data_info.time.tz_convert('US/Eastern') # converting to EST
         data_info.time = str(data_info.time.strftime('%H:%M:%S')) # converting to hour:minute
+
         if data[0]:
             print(data_info.display(title=False))
+            ctypes.windll.kernel32.SetConsoleTitleW(data_info.display(title=True)) # sets window title
         if not data[0]:
             FIData = data[1]
             print(data_info.display(title=False))
+            ctypes.windll.kernel32.SetConsoleTitleW(data_info.display(title=True)) # sets window title
