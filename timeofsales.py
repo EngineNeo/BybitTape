@@ -1,7 +1,8 @@
-from pybit import WebSocket
 import pandas as pd
 from colorama import init, Back
 import ctypes
+from pybit import inverse_perpetual
+from time import sleep
 
 # TO-DO
 
@@ -37,35 +38,33 @@ class LatestData:
                            f" | {self.time} ")
             return display
 
-subs = [
-    "trade.ETHUSD"
-]
-ws = WebSocket(
-    "wss://stream.bybit.com/realtime",
-    subscriptions=subs
+ws_inverse = inverse_perpetual.WebSocket(
+    test = False,
+    domain="bytick"
 )
+    
+def access_trades(message):
+    trade_data = message['data'][0]
+    data_info = LatestData(trade_data['symbol'],
+            str(trade_data['price']),
+            str(trade_data['size']),
+            trade_data['side'],
+            trade_data['timestamp'])
+
+    # Timecode conversions
+    data_info.time = pd.to_datetime(data_info.time) # converting date to timecode
+    data_info.time = data_info.time.tz_convert('US/Eastern') # converting to EST
+    data_info.time = str(data_info.time.strftime('%H:%M:%S')) # converting to hour:minute
+
+    if trade_data[0]:
+        print(data_info.display(title=False))
+        ctypes.windll.kernel32.SetConsoleTitleW(data_info.display(title=True)) # sets window title
+    if not trade_data[0]:
+        trade_data[1]
+        print(data_info.display(title=False))
+        ctypes.windll.kernel32.SetConsoleTitleW(data_info.display(title=True)) # sets window title
+ws_inverse.trade_stream(access_trades, 'ETHUSD')
+
 while True:
-    data = ws.fetch(subs[0])
-    ws.send({"op": "auth"}) # Heartbeat Packet
 
-    if data:
-        FIData = data[0]
-
-        data_info = LatestData(FIData['symbol'],
-                str(FIData['price']),
-                str(FIData['size']),
-                FIData['side'],
-                FIData['timestamp'])
-
-        # Timecode conversions
-        data_info.time = pd.to_datetime(data_info.time) # converting date to timecode
-        data_info.time = data_info.time.tz_convert('US/Eastern') # converting to EST
-        data_info.time = str(data_info.time.strftime('%H:%M:%S')) # converting to hour:minute
-
-        if data[0]:
-            print(data_info.display(title=False))
-            ctypes.windll.kernel32.SetConsoleTitleW(data_info.display(title=True)) # sets window title
-        if not data[0]:
-            FIData = data[1]
-            print(data_info.display(title=False))
-            ctypes.windll.kernel32.SetConsoleTitleW(data_info.display(title=True)) # sets window title
+    sleep(0.01)
