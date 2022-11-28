@@ -5,7 +5,7 @@ Tool for reading market data on Bybit
 
 ### Time of Sales
 
-![Time of Sales](TimeofSales.PNG)
+![Time and Sales](TimeandSales.PNG)
 
 ####  Features
 
