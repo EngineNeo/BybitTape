@@ -1,55 +1,47 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import scrolledtext
 
-# class ApplicationWindow(tk.Frame):
-#     def __init__(self, master=None):
-#         super().__init__(master)
-#         self.pack()
-#         self.create_widgets()
+class DataDisplay:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Trade Data")
+        self.root.geometry("1000x800")
+        
+        self.tree = ttk.Treeview(self.root, columns=("Ticker", "Side", "Price", "Quantity", "Timestamp"))
+        self.tree.heading("#0", text="Ticker", anchor=tk.W)
+        self.tree.heading("#1", text="Side", anchor=tk.W)
+        self.tree.heading("#2", text="Price", anchor=tk.W)
+        self.tree.heading("#3", text="Quantity", anchor=tk.W)
+        self.tree.heading("#4", text="Timestamp", anchor=tk.W)
 
-#     def create_widgets(self):
-#         self.hi_there = tk.Button(self)
-#         self.hi_there["text"] = "Hello World\n(click me)"
-#         self.hi_there.pack(side="top")
+        self.tree.column("#0", stretch=tk.YES)
+        self.tree.column("#1", stretch=tk.YES)
+        self.tree.column("#2", stretch=tk.YES)
+        self.tree.column("#3", stretch=tk.YES)
+        self.tree.column("#4", stretch=tk.YES)
 
-#         self.quit = tk.Button(self, text="QUIT", fg="red",
-#                               command=root.destroy)
-#         self.quit.pack(side="bottom")
+        # Create a vertical scrollbar
+        v_scroll = ttk.Scrollbar(self.root, orient="vertical", command=self.tree.yview)
 
-#     def say_hi(self):
-#         print("hi there, everyone!")
+        # Create a horizontal scrollbar
+        h_scroll = ttk.Scrollbar(self.root, orient="horizontal", command=self.tree.xview)
+        self.tree.configure(yscrollcommand=v_scroll.set, xscrollcommand=h_scroll.set)
 
-# root = tk.Tk()
-# app = ApplicationWindow(master=root)
-# app.mainloop()
+        # Set scrollbars
+        v_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        h_scroll.pack(side=tk.BOTTOM, fill=tk.X)
 
-# Creating tkinter main window
-win = tk.Tk()
-win.title("ScrolledText Widget")
-  
-# Title Label
-# ttk.Label(win, 
-#           text = "ScrolledText Widget Example",
-#           font = ("Arial", 15), 
-#           background = 'green', 
-#           foreground = "white").grid(column = 0,
-#                                      row = 0)
-  
-# Creating scrolled text 
-# area widget
-text_area = scrolledtext.ScrolledText(win, 
-                                      wrap = tk.WORD, 
-                                      width = 40, 
-                                      height = 10, 
-                                      font = ("Arial",
-                                              15))
-  
-text_area.grid(column = 0, pady = 10, padx = 10)
+        # Pack the tree widget
+        self.tree.pack(expand=True, fill='both')
+        
+    def insert_data(self, ticker, side, price, quantity, timestamp):
+        if side == "Buy":
+            color = "blue"
+        else:
+            color = "red"
+        new_item = self.tree.insert("", "end")
+        self.tree.item(new_item, values=(ticker, side, price, quantity, timestamp))
 
-# Inserting Text which is read only
-text_area.insert(tk.INSERT, )
-  
-# Making the text read only
-text_area.configure(state ='disabled')
-win.mainloop()
+
+    def start(self):
+        self.root.mainloop()

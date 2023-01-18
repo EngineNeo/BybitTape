@@ -1,11 +1,11 @@
-# import DataDisplay
 from TradeData import TradeData
+from DataDisplay import DataDisplay
 
-# TO-DO
-# Check if item is list
-# Initialize Tkinter GUI
-# Print trade_data in tkinter window
-
-while True:
+def main():
+    display = DataDisplay() # Create an instance of DataDisplay
     trade_data = TradeData()
-    trade_data.display_trades("ETHUSD")
+    trade_data.display_trades("ETHUSD", display)
+    display.start()
+
+if __name__ == "__main__":
+    main()
