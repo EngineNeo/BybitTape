@@ -20,11 +20,15 @@ class DataDisplay:
         self.tree.column("#3", stretch=tk.YES)
         self.tree.column("#4", stretch=tk.YES)
 
+        self.tree['show'] = 'headings'
+
         # Create a vertical scrollbar
         v_scroll = ttk.Scrollbar(self.root, orient="vertical", command=self.tree.yview)
 
         # Create a horizontal scrollbar
         h_scroll = ttk.Scrollbar(self.root, orient="horizontal", command=self.tree.xview)
+
+        # Configure horizontal and vertical scrollbars
         self.tree.configure(yscrollcommand=v_scroll.set, xscrollcommand=h_scroll.set)
 
         # Set scrollbars
@@ -39,8 +43,7 @@ class DataDisplay:
             color = "blue"
         else:
             color = "red"
-        new_item = self.tree.insert("", "end")
-        self.tree.item(new_item, values=(ticker, side, price, quantity, timestamp))
+        self.tree.insert("", "end", values=(ticker, side, price, quantity, timestamp))
 
 
     def start(self):
