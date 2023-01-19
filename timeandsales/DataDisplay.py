@@ -3,10 +3,13 @@ from tkinter import ttk
 
 class DataDisplay:
     def __init__(self):
+
+        # Init tkinter
         self.root = tk.Tk()
         self.root.title("Trade Data")
         self.root.geometry("1000x800")
         
+        # Creating column headers
         self.tree = ttk.Treeview(self.root, columns=("Ticker", "Side", "Price", "Quantity", "Timestamp"))
         self.tree.heading("#0", text="", anchor=tk.W)
         self.tree.heading("#1", text="Ticker", anchor=tk.W)
@@ -15,6 +18,7 @@ class DataDisplay:
         self.tree.heading("#4", text="Quantity", anchor=tk.W)
         self.tree.heading("#5", text="Timestamp", anchor=tk.W)
 
+        # Creating columns
         self.tree.column("#0", width=0, stretch=tk.NO)
         self.tree.column("#1", stretch=tk.YES)
         self.tree.column("#2", stretch=tk.YES)
@@ -38,11 +42,12 @@ class DataDisplay:
         # Pack the tree widget
         self.tree.pack(expand=True, fill='both')
         
+    # Inserting data into columns
     def insert_data(self, ticker, side, price, quantity, timestamp):
         self.tree.tag_configure("buy", background="blue", foreground = "white")
         self.tree.tag_configure("sell", background="red", foreground = "white")
         self.tree.insert("", "end", values=(ticker, side, price, quantity, timestamp), tags = side.lower())
 
-
+    # Making the gui operable 
     def start(self):
         self.root.mainloop()
