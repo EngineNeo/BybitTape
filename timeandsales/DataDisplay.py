@@ -11,20 +11,23 @@ class DataDisplay:
         self.root.geometry("1000x800")
 
         # Dropdown menu/combobox for symbols
-        self.symbol_combobox = ttk.Combobox(values=current_symbols)
-        self.symbol_combobox.set(current_symbols)
-        self.symbol_combobox.grid(row=0, column=0)
+        self.symbol_selector = tk.StringVar()
+        self.symbol_combobox = ttk.Combobox(self.root, width = 27, textvariable = self.selected_symbol)
+        self.symbol_combobox['values'] = (current_symbols)
+        self.symbol_combobox.current(1)
 
-        def on_select(event):
-            selected_symbol = event.widget.get()
-            self.display_trades(selected_symbol)
+        self.selected_symbol = self.symbol_selector.get()
 
-        # assign the on_select function to the '<<ComboboxSelected>>' event
-        self.symbol_combobox.bind("<<ComboboxSelected>>", on_select)
+        # Eventlistener for combobox to update on userinput
+        def TextBoxUpdate(self, event):
+            self.symbol_combobox.bind("<<ComboboxSelected>>", TextBoxUpdate)
+
+    #     # assign the on_select function to the '<<ComboboxSelected>>' event
+    #     self.symbol_combobox.bind("<<ComboboxSelected>>", on_select)
                 
-    def on_select(self, event):
-        selected_symbol = self.symbol_combobox.get()
-        self.display_trades(selected_symbol)
+    # def on_select(self, event):
+    #     selected_symbol = self.symbol_combobox.get()
+    #     self.display_trades(selected_symbol)
 
         
         # Creating column headers

@@ -1,24 +1,21 @@
 from pybit import inverse_perpetual
 from datetime import datetime
 
-def defined_symbol():
-        current_symbols = []
-        invalid_symbols = []
-        session_auth = inverse_perpetual.HTTP(
+class TradeData:
+    def __init__(self):
+        self.ws = inverse_perpetual.WebSocket(test=False) # Initializing bybit websocket
+
+        self.current_symbols = []
+        self.invalid_symbols = []
+        self.session_auth = inverse_perpetual.HTTP(
             endpoint="https://api-testnet.bybit.com"
         )
 
-        for symbol in session_auth.query_symbol()['result']:
+        for symbol in self.session_auth.query_symbol()['result']:
             if symbol['status'] == 'Trading':
-                current_symbols.append(symbol['name'])
+                self.current_symbols.append(symbol['name'])
             else:
-                invalid_symbols.append(symbol['name'])
-
-        return current_symbols
-
-class TradeData:
-    def __init__(self, test=False):
-        self.ws = inverse_perpetual.WebSocket(test=False) # Initializing bybit websocket
+                self.invalid_symbols.append(symbol['name'])
 
     def display_trades(self, symbol, display):
         def handle_trades(message):

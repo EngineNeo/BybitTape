@@ -2,11 +2,11 @@ from TradeData import TradeData
 from DataDisplay import DataDisplay
 
 def main():
-    trade_data = TradeData(test=False)
-    current_symbols = trade_data.defined_symbol()
-    display = DataDisplay(current_symbols, trade_data.display_trades) # Create an instance of DataDisplay
     trade_data = TradeData()
-    trade_data.display_trades("ETHUSD", display)
+    allowed_symbols = trade_data.current_symbols
+    display = DataDisplay(allowed_symbols) # Create an instance of DataDisplay
+    selected_symbol = display.selected_symbol
+    trade_data.display_trades(selected_symbol, display)
     display.start()
 
 if __name__ == "__main__":
