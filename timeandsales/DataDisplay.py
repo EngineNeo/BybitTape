@@ -8,19 +8,19 @@ class DataDisplay:
         self.root.geometry("1000x800")
         
         self.tree = ttk.Treeview(self.root, columns=("Ticker", "Side", "Price", "Quantity", "Timestamp"))
-        self.tree.heading("#0", text="Ticker", anchor=tk.W)
-        self.tree.heading("#1", text="Side", anchor=tk.W)
-        self.tree.heading("#2", text="Price", anchor=tk.W)
-        self.tree.heading("#3", text="Quantity", anchor=tk.W)
-        self.tree.heading("#4", text="Timestamp", anchor=tk.W)
+        self.tree.heading("#0", text="", anchor=tk.W)
+        self.tree.heading("#1", text="Ticker", anchor=tk.W)
+        self.tree.heading("#2", text="Side", anchor=tk.W)
+        self.tree.heading("#3", text="Price", anchor=tk.W)
+        self.tree.heading("#4", text="Quantity", anchor=tk.W)
+        self.tree.heading("#5", text="Timestamp", anchor=tk.W)
 
-        self.tree.column("#0", stretch=tk.YES)
+        self.tree.column("#0", width=0, stretch=tk.NO)
         self.tree.column("#1", stretch=tk.YES)
         self.tree.column("#2", stretch=tk.YES)
         self.tree.column("#3", stretch=tk.YES)
         self.tree.column("#4", stretch=tk.YES)
-
-        self.tree['show'] = 'headings'
+        self.tree.column("#5", stretch=tk.YES)
 
         # Create a vertical scrollbar
         v_scroll = ttk.Scrollbar(self.root, orient="vertical", command=self.tree.yview)
@@ -39,11 +39,9 @@ class DataDisplay:
         self.tree.pack(expand=True, fill='both')
         
     def insert_data(self, ticker, side, price, quantity, timestamp):
-        if side == "Buy":
-            color = "blue"
-        else:
-            color = "red"
-        self.tree.insert("", "end", values=(ticker, side, price, quantity, timestamp))
+        self.tree.tag_configure("buy", background="blue", foreground = "white")
+        self.tree.tag_configure("sell", background="red", foreground = "white")
+        self.tree.insert("", "end", values=(ticker, side, price, quantity, timestamp), tags = side.lower())
 
 
     def start(self):
