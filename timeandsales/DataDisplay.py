@@ -12,9 +12,10 @@ class DataDisplay:
 
         # Dropdown menu/combobox for symbols
         self.symbol_selector = tk.StringVar()
-        self.symbol_combobox = ttk.Combobox(self.root, width = 27, textvariable = self.selected_symbol, state="readonly")
+        self.symbol_combobox = ttk.Combobox(self.root, width = 27, textvariable = self.symbol_selector, state="readonly")
         self.symbol_combobox['values'] = (current_symbols)
         self.symbol_combobox.current(1)
+        self.symbol_combobox.grid(sticky='W', row = 0, column = 0)
 
         self.selected_symbol = self.symbol_selector.get()
 
@@ -53,12 +54,12 @@ class DataDisplay:
         # Configure horizontal and vertical scrollbars
         self.tree.configure(yscrollcommand=v_scroll.set, xscrollcommand=h_scroll.set)
 
-        # Set scrollbars
-        v_scroll.pack(side=tk.RIGHT, fill=tk.Y)
-        h_scroll.pack(side=tk.BOTTOM, fill=tk.X)
+        # # Set scrollbars
+        # v_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        # h_scroll.pack(side=tk.BOTTOM, fill=tk.X)
 
         # Pack the tree widget
-        self.tree.pack(expand=True, fill='both')
+        self.tree.grid(row = 1, column = 0, columnspan=2, rowspan=2)
         
     # Inserting data into columns
     def insert_data(self, ticker, side, price, quantity, timestamp):

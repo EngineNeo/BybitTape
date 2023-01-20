@@ -1,21 +1,26 @@
 from pybit import inverse_perpetual
+from pybit import usdt_perpetual
+
 from datetime import datetime
 
 class TradeData:
     def __init__(self):
-        self.ws = inverse_perpetual.WebSocket(test=False) # Initializing bybit websocket
+        self.ipws = inverse_perpetual.WebSocket(test=False) # Initializing bybit websocket
+        # self.upws = 
 
-        self.current_symbols = []
-        self.invalid_symbols = []
-        self.session_auth = inverse_perpetual.HTTP(
+        self.inverseperp_symbols = []
+        self.usdt_symbols = []
+        self.spot_symbols = []
+        self.closed_symbols = []
+        self.session_auth = inverse_perpetual.HTTP( # Calling api endpoint for symbols
             endpoint="https://api-testnet.bybit.com"
         )
 
         for symbol in self.session_auth.query_symbol()['result']:
             if symbol['status'] == 'Trading':
-                self.current_symbols.append(symbol['name'])
+                self.inverseperp_symbols.append(symbol['name'])
             else:
-                self.invalid_symbols.append(symbol['name'])
+                self.closed_symbols.append(symbol['name'])
 
     def display_trades(self, symbol, display):
         def handle_trades(message):
@@ -33,4 +38,4 @@ class TradeData:
             except Exception as e: # Error handling
                 print(e)
         
-        self.ws.trade_stream(handle_trades, symbol) # Output of data based on symbol
+        self.ipws.trade_stream(handle_trades, symbol) # Output of data based on symbol
