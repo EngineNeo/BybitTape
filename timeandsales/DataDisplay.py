@@ -8,25 +8,16 @@ class DataDisplay:
         # Init tkinter
         self.root = tk.Tk()
         self.root.title("Trade Data")
-        self.root.geometry("1000x800")
+        self.root.geometry("600x800")
 
         # Dropdown menu/combobox for symbols
         self.symbol_selector = tk.StringVar()
         self.symbol_combobox = ttk.Combobox(self.root, width = 27, textvariable = self.symbol_selector, state="readonly")
         self.symbol_combobox['values'] = (current_symbols)
-        self.symbol_combobox.current(1)
+        self.symbol_combobox.set("ETHUSD") #set default value to ETHUSD
         self.symbol_combobox.grid(sticky='W', row = 0, column = 0)
 
         self.selected_symbol = self.symbol_selector.get()
-
-        # Eventlistener for combobox to update on userinput
-        # def TextBoxUpdate(self, event):
-        #     self.symbol_combobox.bind("<<ComboboxSelected>>", TextBoxUpdate)
-                
-    # def on_select(self, event):
-    #     selected_symbol = self.symbol_combobox.get()
-    #     self.display_trades(selected_symbol)
-
         
         # Creating column headers
         self.tree = ttk.Treeview(self.root, columns=("Ticker", "Side", "Price", "Quantity", "Timestamp"))
@@ -39,33 +30,37 @@ class DataDisplay:
 
         # Creating columns
         self.tree.column("#0", width=0, stretch=tk.NO)
-        self.tree.column("#1", stretch=tk.YES)
-        self.tree.column("#2", stretch=tk.YES)
-        self.tree.column("#3", stretch=tk.YES)
-        self.tree.column("#4", stretch=tk.YES)
-        self.tree.column("#5", stretch=tk.YES)
+        self.tree.column("#1", width=50, stretch=tk.YES)
+        self.tree.column("#2", width=50, stretch=tk.YES)
+        self.tree.column("#3", width=100, stretch=tk.YES)
+        self.tree.column("#4", width=100, stretch=tk.YES)
+        self.tree.column("#5", width=100, stretch=tk.YES)
+        
+        # Adding scrollbar
+        v_scroll = tk.Scrollbar(self.root, orient=tk.VERTICAL, command=self.tree.yview)
+        v_scroll.grid(row=1, column=2, sticky='ns')
 
-        # Create a vertical scrollbar
-        v_scroll = ttk.Scrollbar(self.root, orient="vertical", command=self.tree.yview)
-
-        # Create a horizontal scrollbar
-        h_scroll = ttk.Scrollbar(self.root, orient="horizontal", command=self.tree.xview)
-
-        # Configure horizontal and vertical scrollbars
-        self.tree.configure(yscrollcommand=v_scroll.set, xscrollcommand=h_scroll.set)
-
-        # # Set scrollbars
-        # v_scroll.pack(side=tk.RIGHT, fill=tk.Y)
-        # h_scroll.pack(side=tk.BOTTOM, fill=tk.X)
+        # Connect scrollbar to tree
+        self.tree.configure(yscrollcommand=v_scroll.set)
 
         # Pack the tree widget
-        self.tree.grid(row = 1, column = 0, columnspan=2, rowspan=2)
+        self.tree.grid(row=1, column=0, columnspan=2, rowspan=99,sticky='nsew') 
+
+        # Add a row and column configuration to the grid layout manager
+        self.root.grid_rowconfigure(1, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
         
     # Inserting data into columns
     def insert_data(self, ticker, side, price, quantity, timestamp):
-        self.tree.tag_configure("buy", background="blue", foreground = "white")
-        self.tree.tag_configure("sell", background="red", foreground = "white")
-        self.tree.insert("", "end", values=(ticker, side, price, quantity, timestamp), tags = side.lower())
+        self.tree.tag_configure("Buy", background="blue", foreground = "white")
+        self.tree.tag_configure("Sell", background="red", foreground = "white")
+        item_id = self.tree.insert("", "end", values=(ticker, side, price, quantity, timestamp), tags = side.lower())
+        self.tree.see(item_id)
+
+    # Method to clear the treeview
+    def clear_tree(self):
+        for i in self.tree.get_children():
+            self.tree.delete(i)
 
     # Making the gui operable 
     def start(self):
