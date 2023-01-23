@@ -9,7 +9,8 @@ Tool for reading market data on Bybit
 
 ####  Features
 
-* Auto-updating Time of Sales from Bybit
+* Inverse and USDT futures
+* Time and Sales from Bybit
 * Buy and Sell Side
 * Quantity
 * Price 
