@@ -19,8 +19,9 @@ class DataDisplay:
         self.selected_symbol = self.symbol_selector.get()
         
         # User input field for filtering by quantity
-        self.filter_quantity = tk.StringVar()
+        self.filter_quantity = tk.IntVar()
         self.filter_entry = tk.Entry(self.root, textvariable=self.filter_quantity)
+        self.filter_quantity.set(1)
         self.filter_entry.grid(sticky='E', row=0, column=0)
 
         # Creating column headers
