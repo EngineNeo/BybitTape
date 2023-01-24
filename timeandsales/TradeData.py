@@ -27,7 +27,7 @@ class TradeData:
                 
         self.open_symbols = self.inverseperp_symbols + self.usdt_symbols
 
-    def display_trades(self, symbol, display):
+    def display_trades(self, symbol, display, filter_value):
         def handle_trades(message):
             try: # Attemping the function before running
                 data = message['data']
@@ -39,7 +39,8 @@ class TradeData:
                     timestamp = trade['timestamp']
                     timestamp = datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ') # Parsing timestamp information
                     timestamp = timestamp.time() # Only using H-M-S
-                    display.insert_data(ticker, side, price, quantity, timestamp)
+                    if filter_value and quantity >= filter_value:
+                        display.insert_data(ticker, side, price, quantity, timestamp)
             except Exception as e: # Error handling
                 print(e)
         

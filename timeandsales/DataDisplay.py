@@ -18,18 +18,10 @@ class DataDisplay:
         
         self.selected_symbol = self.symbol_selector.get()
         
-        # Adding "Filter" label
-        filter_label = tk.Label(self.root, text="Filter", font=("Arial", 10))
-        filter_label.grid(row=0, column=0, padx=10, sticky='W')
-
-        # Adding input field for filtering by quantity
-        self.filter_entry = tk.Entry(self.root, width=5)
-        self.filter_entry.grid(row=0, column=1, padx=10, sticky='W')
-
-        # Adding a button to apply the filter
-        self.apply_filter_button = tk.Button(self.root, text="Apply Filter")
-        self.apply_filter_button.grid(row=0, column=2, padx=10, sticky='W')
-
+        # User input field for filtering by quantity
+        self.filter_quantity = tk.StringVar()
+        self.filter_entry = tk.Entry(self.root, textvariable=self.filter_quantity)
+        self.filter_entry.grid(sticky='E', row=0, column=0)
 
         # Creating column headers
         self.tree = ttk.Treeview(self.root, columns=("Ticker", "Side", "Price", "Quantity", "Timestamp"))

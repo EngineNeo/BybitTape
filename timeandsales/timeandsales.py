@@ -11,23 +11,30 @@ def main():
         selected_symbol = display.symbol_combobox.get()
         trade_data.display_trades(selected_symbol, display)
         
-    def apply_filter():
-            # Get the filter value from the input field
-            filter_value = display.filter_entry.get()
-            if filter_value:
-                # Convert the value to an int and use it to filter the data displayed in the treeview
-                filter_value = int(filter_value)
-                for item in display.tree.get_children():
-                    quantity = display.tree.item(item, "values")[3]
-                    if quantity < filter_value:
-                        display.tree.delete(item)
+    def filter_trades():
+        # Get value from user input
+        filter_value = int(display.filter_entry.get())
+        display.clear_tree() # Clear tree before adding new data
+        selected_symbol = display.symbol_combobox.get()
+        trade_data.display_trades(selected_symbol, display, filter_value)
 
-    # Combobox events
+    def validate_int(P): # Function for the following int validation
+        if P.isdigit():
+            return True
+        return False
+
+    # Only allow integers to be entered
+    display.filter_entry.config(validate="key")
+    display.filter_entry.config(validatecommand=(display.root.register(validate_int), '%P'))
+
+    # Combobox event
     display.symbol_combobox.bind("<<ComboboxSelected>>", on_select)
-    display.filter_entry.bind("<Return>", apply_filter)
+
+    # Filter Event
+    display.filter_entry.bind("<Return>", filter_trades)
     
     selected_symbol = display.symbol_combobox.get()
-    trade_data.display_trades(selected_symbol, display)
+    trade_data.display_trades(selected_symbol, display, 1)
     display.start()
 
 if __name__ == "__main__":
