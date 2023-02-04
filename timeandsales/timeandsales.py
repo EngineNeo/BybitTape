@@ -1,14 +1,17 @@
-from PyQt5.QtWidgets import QApplication
-from TradeData import TradeData
+from TradeData import handle_trades
 from DataDisplay import DataDisplay
+import sys
+from PyQt5.QtWidgets import QApplication
 
 def main():
-    app = QApplication([]) # Initializing QApplication
-    trade_data = TradeData() # Initializing TradeData
-    display = DataDisplay() # Initializing DataDisplay
-    trade_data.display_trades("BTCUSD", display) # Displaying trades for BTCUSD
-    display.show() # Showing the PyQt table
-    app.exec_() # Running the PyQt GUI application
+    app = QApplication(sys.argv)
+
+    trade_data = handle_trades() # Call the handle_trades function from TradeData.py
+
+    display = DataDisplay(trade_data) # Create a DataDisplay object with the trade data
+    display.show() # Show the DataDisplay window
+
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()
